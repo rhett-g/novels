@@ -1,0 +1,6 @@
+*.pyc
+*.png
+*.log
+.vscode/
+royalRoad.sh
+tmp/*
