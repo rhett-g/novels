@@ -1,11 +1,26 @@
 """This program is designed to scrape a designated story from royalroadl.com"""
 import argparse
 import time
-from calibre import chapter_info, create_toc
+from collections import namedtuple
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 
-# from selenium.webdriver.common.keys import Keys
+chapter_info = namedtuple('chapter_info', 'url title html')
+
+def create_toc(chapters):
+    """Calibre requires that we have a TOC for multi-chapter html input"""
+    toc_file = open("tmp/TOC.html", "w")
+    indent = "  "
+    toc_file.write("<html>\n")
+    toc_file.write(indent*2+"<body>\n")
+    toc_file.write(indent*3+"<h1>Table of Contents</h1>\n")
+    toc_file.write(indent*3+"<p style='text-indent:0pt'>\n")
+    for chap in chapters:
+        toc_file.write(indent*4+"<a href='"+chap.title+".html'>"+chap.title+"</a><br/>\n")
+    toc_file.write(indent*3+"</p>\n")
+    toc_file.write(indent*2+"</body>\n")
+    toc_file.write("</html>\n")
+    toc_file.close()
 
 def scrape_chapter_text(web_driver, chapt_info):
     """For a particular chapter scrape only the html for the fiction"""
@@ -39,7 +54,7 @@ def show_all_chapters(web_driver):
 
 if __name__ == "__main__":
     DRIVER = webdriver.PhantomJS()
-    DRIVER.set_window_size(1920,1080)
+    DRIVER.set_window_size(1920, 1080)
     PARSER = argparse.ArgumentParser()
     PARSER.add_argument("TOC_URL", help="""Input the URL for the story you wish
     to create an .epub for. This should be the page that has the TOC""")
@@ -53,4 +68,3 @@ if __name__ == "__main__":
     create_toc(CHAPTER_INFOS)
     for chapter in CHAPTER_INFOS:
         scrape_chapter_text(DRIVER, chapter)
-

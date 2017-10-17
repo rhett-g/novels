@@ -1,7 +1,7 @@
 # novels
 This repo is to scrape certain websites for their fictions and compile them into an epub format using selenium for scraping and calibre for epub packing
 
-##Requirements
+## Requirements
 1. Selenium
 ```shell
 sudo -H pip install selenium
