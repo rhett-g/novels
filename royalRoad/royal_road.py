@@ -1,6 +1,5 @@
 """This program is designed to scrape a designated story from royalroadl.com"""
 import argparse
-import time
 from collections import namedtuple
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -26,7 +25,6 @@ def scrape_chapter_text(web_driver, chapt_info):
     """For a particular chapter scrape only the html for the fiction"""
     print chapt_info.url
     web_driver.get(chapt_info.url)
-    time.sleep(3)
     text_div = web_driver.find_element_by_css_selector("div.chapter-inner")
     fiction_file = open("tmp/"+chapt_info.title+".html", "w")
     fiction_file.write("<html>\n")

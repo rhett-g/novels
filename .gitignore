@@ -3,4 +3,4 @@
 *.log
 .vscode/
 royalRoad.sh
-tmp/*
+*/tmp/*
