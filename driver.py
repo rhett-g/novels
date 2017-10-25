@@ -1,6 +1,7 @@
 """This program is made to identify what website we are scraping from
 and initiate the correct scraper"""
 import argparse
+import os
 import subprocess
 
 def select_driver(url, title):
@@ -26,4 +27,6 @@ if __name__ == "__main__":
     road and whatever chapter you wish to start from in wuxia world""")
     PARSER.add_argument("FICTION_NAME", help="The name of the fiction")
     ARGS = PARSER.parse_args()
+    if not os.path.exists("tmp"):
+        os.makedirs("tmp")
     select_driver(ARGS.URL, ARGS.FICTION_NAME)
