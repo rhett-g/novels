@@ -29,9 +29,19 @@ sudo mv $PHANTOM_JS /usr/local/share
 sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
 ```
 
-
-
 3. Calibre
 ```shell
 sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 ```
+
+## How to run
+```shell
+python driver.py url fictionName
+```
+
+## Supported Sites
+www.wuxiaworld.com
+www.royalroadl.com
+
+### Planned Sites
+www.gravitytales.com
