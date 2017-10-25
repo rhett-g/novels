@@ -36,12 +36,13 @@ sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | 
 
 ## How to run
 ```shell
-python driver.py url fictionName
+./createEpub.sh url fictionName
 ```
 
 ## Supported Sites
 www.wuxiaworld.com
 www.royalroadl.com
+www.gravitytales.com
 
 ### Planned Sites
-www.gravitytales.com
+www.bluesilvertranslations.com
