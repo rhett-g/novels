@@ -43,6 +43,7 @@ sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | 
 www.wuxiaworld.com
 www.royalroadl.com
 www.gravitytales.com
+www.lightnovelbastion.com
 
 ### Planned Sites
 www.bluesilvertranslations.com

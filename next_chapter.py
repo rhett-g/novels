@@ -60,6 +60,7 @@ def chapter_text_exists(web_driver, element):
     try:
         web_driver.find_element_by_xpath(element)
     except NoSuchElementException:
+        print "ent"
         return False
     return True
 

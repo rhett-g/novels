@@ -23,6 +23,10 @@ def select_driver(url, title, driver):
     elif "gravitytales" in url.lower():
         print "Fiction is from Gravity Tales"
         next_chapter_driver(driver, title, "//div[@id='chapterContent']")
+    elif "bastion" in url.lower():
+        print "Fiction is from Light Novel Bastion"
+        next_chapter_driver(
+            driver, title, "//section[@class='box style1 blacktext']")
     else:
         print "We have not implemented a scraper for this website"
 
@@ -33,13 +37,14 @@ def next_chapter_driver(web_driver, title, element):
     # while there is a next chapter scrape it's text
     while ncd.chapter_text_exists(web_driver, element):
         if chapter_count % 50 == 0 and chapter_count != 0:
+            print chapter_count
             make_epub(chapter_count, title)
         ncd.scrape_chapter_text(web_driver, chapter_count, element)
         if ncd.next_chapter_exists(web_driver):
             ncd.click_next_chapter(web_driver)
             chapter_count += 1
-            continue
-        break
+        #     continue
+        # break
     # create the toc so calibre can create the epub
     make_epub(chapter_count, title)
 
