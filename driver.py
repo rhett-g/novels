@@ -37,20 +37,19 @@ def next_chapter_driver(web_driver, title, element):
     # while there is a next chapter scrape it's text
     while ncd.chapter_text_exists(web_driver, element):
         if chapter_count % 50 == 0 and chapter_count != 0:
-            print chapter_count
             make_epub(chapter_count, title)
         ncd.scrape_chapter_text(web_driver, chapter_count, element)
         if ncd.next_chapter_exists(web_driver):
             ncd.click_next_chapter(web_driver)
             chapter_count += 1
-        #     continue
-        # break
+            continue
+        break
     # create the toc so calibre can create the epub
     make_epub(chapter_count, title)
 
 
 def make_epub(chapter_count, name):
-    ncd.create_toc(chapter_count, name)
+    first_chap = ncd.create_toc(chapter_count, name)
     ncd.make_epub_dir(chapter_count, name)
     commands = []
     commands.append(name.join(["ebook-convert tmp/", ".html ", ".epub"]))
@@ -59,6 +58,7 @@ def make_epub(chapter_count, name):
     commands.append("rm -rf " + name)
     for command in commands:
         os.system(command)
+    return first_chap
 
 
 if __name__ == "__main__":

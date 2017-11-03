@@ -1,7 +1,6 @@
 """This program is designed to scrape a designated story from royalroadl.com"""
 import os
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-# from selenium.common.exceptions import
 
 
 def create_toc(chapter_count, fiction_name):
@@ -20,6 +19,7 @@ def create_toc(chapter_count, fiction_name):
     toc_file.write(indent * 2 + "</body>\n")
     toc_file.write("</html>\n")
     toc_file.close()
+    return first_chapter
 
 
 def last_number_divisible_by_50(currentNum):
@@ -52,6 +52,9 @@ def next_chapter_exists(web_driver):
         web_driver.find_element_by_partial_link_text("Next")
     except NoSuchElementException:
         return False
+    except TimeoutException:
+        web_driver.refresh()
+        next_chapter_exists(web_driver)
     return True
 
 
@@ -60,7 +63,6 @@ def chapter_text_exists(web_driver, element):
     try:
         web_driver.find_element_by_xpath(element)
     except NoSuchElementException:
-        print "ent"
         return False
     return True
 
@@ -95,3 +97,12 @@ def make_epub_dir(chapter_count, name):
     first_chapter = last_number_divisible_by_50(chapter_count)
     chapter_dir = name + "/" + str(first_chapter) + "_" + str(chapter_count)
     os.makedirs(chapter_dir)
+
+
+def go_to_page(web_driver, url):
+    """Send webdriver to page"""
+    try:
+        web_driver.get(url)
+    except TimeoutException:
+        web_driver.refresh()
+        go_to_page(web_driver, url)
