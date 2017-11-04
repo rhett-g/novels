@@ -24,7 +24,7 @@ def get_chapter_number_from_url(url):
     # if there are no matches we reurn none
     if start is None:
         return None
-    url_parts = [url_full_path[:-1], url_base[:start], "||", url_base[end:]]
+    url_parts = [url_full_path[:], url_base[:start], "||", url_base[end:]]
     return URLINFO(url_parts=url_parts, chapter_number=chapter_number)
 
 

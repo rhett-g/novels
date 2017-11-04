@@ -1,7 +1,7 @@
 from pyspark import SparkContext, SparkConf
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from next_chapter import go_to_page, scrape_chapter_text
+from next_chapter import go_to_page, scrape_chapter_text, chapter_text_exists
 from driver import make_epub
 import sys
 
@@ -48,8 +48,8 @@ def spark_driver(urls):
     return max_chap
 
 
-def make_epubs(max, name):
-    current_chap = max
+def make_epubs(max_chap, name):
+    current_chap = max_chap
     while current_chap != 0:
         current_chap = make_epub(current_chap, name)
 
@@ -65,4 +65,4 @@ if __name__ == "__main__":
     MAX_RDD = CHAPTERS_RDD.foreachPartition(spark_driver)
     MAX = MAX_RDD.max()
     sc.stop()
-    make_epubs(305, FICTION_NAME)
+    make_epubs(MAX, FICTION_NAME)
