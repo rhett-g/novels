@@ -61,7 +61,7 @@ spark-submit urlOfLatestChapter fictionName
 ```
 
 ## Spark vs Regular 
-Spark shows a 40% decrease in time over the regular version for 50 chapter test.
+Spark shows a 40% decrease in time over the regular version for 50 chapter test and a 60% decrease over 1300 chapters on a 4 core computer. Note that partitions should be increased/decreased to better optimize for the number of cores one has.
 
 ## Desired Features
 
