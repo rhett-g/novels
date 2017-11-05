@@ -34,10 +34,40 @@ sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
 sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 ```
 
-## How to run
+## Requirements for Spark
+
+1. Java
+
 ```shell
-./driver.py url fictionName
+sudo apt-get update
+sudo apt-get install default-jdk
 ```
+
+2. Spark
+
+```shell
+sudo -H pip install pyspark
+```
+
+## How to run
+Regular Version
+```shell
+./driver.py urlOfFirstChapter fictionName
+```
+
+Spark Version
+```shell
+spark-submit urlOfLatestChapter fictionName
+```
+
+## Spark vs Regular 
+Spark shows a 40% decrease in time over the regular version for 50 chapter test.
+
+## Desired Features
+
+1. Splitting epubs into books based on urls
+
+2. Handling chapter titles
 
 ## Supported Sites
 * www.wuxiaworld.com
