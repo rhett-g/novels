@@ -69,6 +69,8 @@ Spark shows a 40% decrease in time over the regular version for 50 chapter test 
 
 2. Handling chapter titles
 
+3. Take out calibre and spark
+
 ## Supported Sites
 * www.wuxiaworld.com
 * www.royalroadl.com
