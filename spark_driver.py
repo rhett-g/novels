@@ -60,8 +60,7 @@ if __name__ == "__main__":
     MAX_RDD = CHAPTERS_PAIRS_RDD.mapPartitions(spark_driver)
     MAX = MAX_RDD.max()
     BOOKS = create_list_of_book_endings(MAX)
-    BOOKS_RDD = SC.parallelize(BOOKS, 24)
-    BOOKS_RDD.foreach(lambda book_ending: utils.make_epub(
-        book_ending, FICTION_NAME))
+    for ending in BOOKS:
+        utils.make_epub(ending, FICTION_NAME)
     SC.stop()
     utils.clean_up(FICTION_NAME)

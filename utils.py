@@ -170,6 +170,9 @@ def scrape_chapter_text(web_driver, chapter_count, element):
     except TimeoutException:
         web_driver.refresh()
         scrape_chapter_text(web_driver, chapter_count, element)
+    except NoSuchElementException:
+        web_driver.refresh()
+        scrape_chapter_text(web_driver, chapter_count, element)
 
 
 def get_chapter_number_from_url(url):
@@ -193,12 +196,25 @@ def get_chapter_number_from_url(url):
     return URLINFO(url_parts=url_parts, chapter_number=chapter_number)
 
 
-def create_list_of_chapters(first_chapter_num, last_chapter_num, url_parts):
+def get_chapter_urls(url):
+    """Returns all the urls for a fiction"""
+    web_driver = setup_web_driver()
+    url_info = get_chapter_number_from_url(url)
+    chapters = find_range_of_chapters(url_info, web_driver)
+    web_driver.close()
+    toReturnURLs = []
+    for index in xrange(1, len(chapters)):
+        toReturnURLs.append(str(index) + "||" + chapters[index - 1])
+    return toReturnURLs
+
+
+def create_list_of_chapters(first_chap_num, last_chap_num, url_parts, chap_num_len):
     """Creates a list of urls created by inserting the chapter number into
     a common url scheme"""
     toReturnUrls = []
-    for i in xrange(first_chapter_num, last_chapter_num + 1):
-        url = "".join(url_parts).replace("||", str(i))
+    for i in xrange(first_chap_num, last_chap_num + 1):
+        chap_num = str(i).rjust(chap_num_len, "0")
+        url = "".join(url_parts).replace("||", chap_num)
         toReturnUrls.append(url)
     return toReturnUrls
 
@@ -207,14 +223,19 @@ def find_range_of_chapters(url_info, web_driver):
     """Recursively find all the sets of chapters for a fiction
     that does not have simple chapter scheme. For example
     de-book-34-chapter-22 will generate 34 sets of chapters"""
+    chapter_num_len = 0
+    if url_info.chapter_number.startswith("0"):
+        chapter_num_len = len(url_info.chapter_number)
     chapters = create_list_of_chapters(
-        1, int(url_info.chapter_number), url_info.url_parts)
-    web_driver.get(chapters[0])
-    if chapter_exists(web_driver, "Previous"):
+        1, int(url_info.chapter_number), url_info.url_parts, chapter_num_len)
+    # print chapters
+    get_with_timeout(web_driver, chapters[0])
+    if chapter_exists(web_driver, "Prev"):
         current_url = chapters[0]
-        click_chapter(web_driver, "Previous")
+        click_chapter(web_driver, "Prev")
         prev_url = web_driver.current_url
         prev_chap_info = get_chapter_number_from_url(prev_url)
+        print prev_chap_info
         if not is_first_chapter(prev_url, current_url, prev_chap_info):
             return find_range_of_chapters(prev_chap_info, web_driver) + chapters
     return chapters
@@ -227,6 +248,8 @@ def is_first_chapter(prev_url, current_url, prev_chap_info):
     if prev_url == current_url:
         return True
     if prev_chap_info is None:
+        return True
+    if prev_chap_info[-1] == '0':
         return True
     return False
 
@@ -241,6 +264,12 @@ def get_article_element(url):
         return "//div[@id='chapterContent']"
     elif "bastion" in url.lower():
         return"//section[@class='box style1 blacktext']"
+    elif "volare" in url.lower():
+        return"//div[@class='entry-container']"
+    elif "fantasy" in url.lower():
+        return"//div[@class='entry-content content']"
+    elif "krtranslations" in url.lower():
+        return"//div[@class='entry-content']"
     else:
         print "We have not implemented a scraper for this website"
 
