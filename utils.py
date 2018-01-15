@@ -208,7 +208,8 @@ def get_chapter_urls(url):
     return toReturnURLs
 
 
-def create_list_of_chapters(first_chap_num, last_chap_num, url_parts, chap_num_len):
+def create_list_of_chapters(first_chap_num, last_chap_num,
+                            url_parts, chap_num_len):
     """Creates a list of urls created by inserting the chapter number into
     a common url scheme"""
     toReturnUrls = []
@@ -219,7 +220,7 @@ def create_list_of_chapters(first_chap_num, last_chap_num, url_parts, chap_num_l
     return toReturnUrls
 
 
-def find_range_of_chapters(url_info, web_driver):
+def find_range_of_chapters(url_info, driver):
     """Recursively find all the sets of chapters for a fiction
     that does not have simple chapter scheme. For example
     de-book-34-chapter-22 will generate 34 sets of chapters"""
@@ -228,16 +229,14 @@ def find_range_of_chapters(url_info, web_driver):
         chapter_num_len = len(url_info.chapter_number)
     chapters = create_list_of_chapters(
         1, int(url_info.chapter_number), url_info.url_parts, chapter_num_len)
-    # print chapters
-    get_with_timeout(web_driver, chapters[0])
-    if chapter_exists(web_driver, "Prev"):
+    get_with_timeout(driver, chapters[0])
+    if chapter_exists(driver, "Prev"):
         current_url = chapters[0]
-        click_chapter(web_driver, "Prev")
-        prev_url = web_driver.current_url
+        click_chapter(driver, "Prev")
+        prev_url = driver.current_url
         prev_chap_info = get_chapter_number_from_url(prev_url)
-        print prev_chap_info
         if not is_first_chapter(prev_url, current_url, prev_chap_info):
-            return find_range_of_chapters(prev_chap_info, web_driver) + chapters
+            return find_range_of_chapters(prev_chap_info, driver) + chapters
     return chapters
 
 
