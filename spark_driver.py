@@ -11,7 +11,7 @@ def setup_spark():
 
 def get_chapter_urls(url):
     """Returns all the urls for a fiction"""
-    web_driver = utils.setup_web_driver()
+    web_driver = utils.setup_web_driver(False)
     url_info = utils.get_chapter_number_from_url(url)
     chapters = utils.find_range_of_chapters(url_info, web_driver)
     web_driver.close()
@@ -26,7 +26,7 @@ def spark_driver(urls):
     expensive as such we pass in a partition of urls and their chap
     numbers in the form chap_num:url"""
     # set up selenium
-    web_driver = utils.setup_web_driver()
+    web_driver = utils.setup_web_driver(False)
     chap_nums = []
     for url in urls:
         chap_num, url = url

@@ -107,12 +107,17 @@ def make_epub_dir(chapter_count, name):
 URLINFO = namedtuple('urlInfo', 'url_parts chapter_number')
 
 
-def setup_web_driver():
+def setup_web_driver(debug):
     # setting the page load strategy to eager means we no longer have
     # to wait for adds to load before we scrape the page
     capabilities = DesiredCapabilities.PHANTOMJS
     capabilities["pageLoadStrategy"] = "eager"
     web_driver = webdriver.PhantomJS(desired_capabilities=capabilities)
+    if debug:
+        capabilities = DesiredCapabilities.FIREFOX
+        capabilities["pageLoadStrategy"] = "eager"
+        web_driver = webdriver.Firefox(capabilities=capabilities)
+
     web_driver.set_page_load_timeout(10)
     # set window size so we load desktop version
     web_driver.set_window_size(1920, 1080)
@@ -165,8 +170,7 @@ def scrape_chapter_text(web_driver, chapter_count, element):
     """For a particular chapter scrape only the html for the fiction"""
     try:
         article = web_driver.find_element_by_xpath(element)
-        text = article.get_attribute("innerHTML").encode('utf-8')
-        return text
+        return article.get_attribute("innerHTML").encode('utf-8')
     except TimeoutException:
         web_driver.refresh()
         scrape_chapter_text(web_driver, chapter_count, element)
@@ -182,7 +186,8 @@ def get_chapter_number_from_url(url):
     # this regex finds chapters in the following formats
     # 145
     # book-2-chapter-32
-    regex = r"([0-9]+(-)*)+"
+    # chapter-225-2
+    regex = r"([0-9]+(-)*)"
     matches = re.finditer(regex, url_base)
     start = 0
     for match in matches:

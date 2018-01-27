@@ -21,10 +21,10 @@ sudo apt-get update
 sudo apt-get install build-essential chrpath libssl-dev libxft-dev
 sudo apt-get install libfreetype6 libfreetype6-dev
 sudo apt-get install libfontconfig1 libfontconfig1-dev
-export PHANTOM_JS="phantomjs-2.1.1-linux-x86_64"
-wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2
-sudo tar xvjf $PHANTOM_JS.tar.bz2
-rm -rf $PHANTOM_JS.tar.bz2
+export PHANTOM_JS="phantomjs-2.5.0-beta-linux-ubuntu-xenial-x86_64"
+wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.gz
+sudo tar xvjf $PHANTOM_JS.tar.gz
+rm -rf $PHANTOM_JS.tar.gz
 sudo mv $PHANTOM_JS /usr/local/share
 sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
 ```
@@ -57,7 +57,7 @@ Regular Version
 
 Spark Version
 ```shell
-spark-submit urlOfLatestChapter fictionName
+spark-submit spark_driver.py urlOfLatestChapter fictionName
 ```
 
 ## Spark vs Regular 
@@ -75,7 +75,7 @@ Spark shows a 40% decrease in time over the regular version for 50 chapter test 
 * www.wuxiaworld.com
 * www.royalroadl.com
 * www.gravitytales.com
-* www.lightnovelbastion.com
+* www.lightnovelbastion.com 
 
 ### Planned Sites
 * www.bluesilvertranslations.com

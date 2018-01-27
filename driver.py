@@ -4,9 +4,9 @@ and initiate the correct scraper"""
 import utils
 
 
-def driver(url, title):
+def driver(url, title, debug):
     """This is the driver for fictions that have a next chapter button"""
-    web_driver = utils.setup_web_driver()
+    web_driver = utils.setup_web_driver(debug)
     utils.get_with_timeout(web_driver, url)
     chapter_count = 0
     element = utils.get_article_element(url)
@@ -28,5 +28,5 @@ def driver(url, title):
 if __name__ == "__main__":
     URL, FICTION_NAME = utils.arg_parse()
     utils.make_tmp_dir()
-    driver(URL, FICTION_NAME)
+    driver(URL, FICTION_NAME, True)
     utils.clean_up(FICTION_NAME)
